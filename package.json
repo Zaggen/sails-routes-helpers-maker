@@ -1,6 +1,6 @@
 {
   "name": "sails-routes-helpers-maker",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "description": "It takes the object with all routes defined in it (sails.js routes) and create path helpers, based on RoR path helpers",
   "main": "index.js",
   "scripts": {
