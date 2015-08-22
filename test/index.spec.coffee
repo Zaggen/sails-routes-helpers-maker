@@ -82,7 +82,6 @@ describe 'route-based-helpers Module', ->
       fotos: photosLocales
 
     multilingualHelpers = routeBasedHelpers.makeHelpers(multilingualRoutes, routeLocales)
-    console.log {multilingualHelpers}
 
     it 'should create a photosPath method when a route /photos/ is provided', ->
       expect(multilingualHelpers.photosPath).to.be.a('function')
@@ -122,4 +121,6 @@ describe 'route-based-helpers Module', ->
       describe 'newPhotosPath helper', ->
         it 'should return the edit path when nothing is passed as argument', ->
           expect(multilingualHelpers.newPhotosPath()).to.equal("/photos/new")
+          expect(multilingualHelpers.newPhotosPath('en')).to.equal("/photos/new")
+          expect(multilingualHelpers.newPhotosPath('es')).to.equal("/es/fotos/new")
 
