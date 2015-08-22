@@ -12,18 +12,18 @@ newsRoutesHelpers = require('def-inc').Module ->
       routeFragments = route.split('/')
       httpVerb = routeFragments.shift() # Not used yet
       routeName = if (routeName = routeFragments.shift()) is '' then routeName = 'home' else routeName
-      baseRoute = "/#{routeName}"
       routeParams = []
       controllerAction = null
+      isMultilingual = no
 
       if routeLocales?
-        currentRouteLocale = routeLocales[routeName] if routeLocales[routeName]?
-        # if it is multilingual but is not the default routeName then skip to avoid creating
-        # helpers in different languages, we only want to create the default one, that can return all language versions.
-        if currentRouteLocale[siteDefaultLang] isnt routeName then continue
-        isMultilingual = yes
-      else
-        isMultilingual = no
+        if routeLocales[routeName]?
+          currentRouteLocale = routeLocales[routeName]
+          # if it is multilingual but is not the default routeName then skip to avoid creating
+          # helpers in different languages, we only want to create the default one, that can return all language versions.
+          if currentRouteLocale[siteDefaultLang] isnt routeName and routeName isnt 'home'
+            continue
+          isMultilingual = yes
 
       for fragment in routeFragments
         if fragment.charAt(0) is ':'
@@ -38,7 +38,7 @@ newsRoutesHelpers = require('def-inc').Module ->
       if isMultilingual
         fn = getMultilingualPathFn(routeName, routeParams, controllerAction, routeLocales, multilingualHelperDefaultLang)
       else
-        fn = getPathFn(baseRoute, routeParams, controllerAction)
+        fn = getPathFn(routeName, routeParams, controllerAction)
 
       if not helpers[helperName]?
         helpers[helperName] = fn
@@ -51,17 +51,8 @@ newsRoutesHelpers = require('def-inc').Module ->
     else
       routeName + fnSuffix
 
-  checkForInconsistentRoutes = (routeName, routeParams)->
-    if routeParams.length > 0
-      if routeSetParamsQ[routeName]? and routeSetParamsQ[routeName] isnt routeParams.length
-        errMsg = """
-          The routes related to /#{routeName} have inconsistent parameters,
-          this module can't guess which one should use, please modify those
-          routes to have the same number of parameters """
-        throw new Error(errMsg)
-      routeSetParamsQ[routeName] = routeParams.length
-
-  getPathFn = (path, params, action)->
+  getPathFn = (routeName, params, action)->
+    path = if routeName isnt 'home' then "/#{routeName}" else "/"
     return (instance)->
       if instance?
         for expectedParam in params
@@ -101,6 +92,16 @@ newsRoutesHelpers = require('def-inc').Module ->
     path = "/#{routeLocales[routeName][lang]}"
     path = if lang is siteDefaultLang then path else "/#{lang}#{path}"
     return path
+
+  checkForInconsistentRoutes = (routeName, routeParams)->
+    if routeParams.length > 0
+      if routeSetParamsQ[routeName]? and routeSetParamsQ[routeName] isnt routeParams.length
+        errMsg = """
+          The routes related to /#{routeName} have inconsistent parameters,
+          this module can't guess which one should use, please modify those
+          routes to have the same number of parameters """
+        throw new Error(errMsg)
+      routeSetParamsQ[routeName] = routeParams.length
 
 
 module.exports = newsRoutesHelpers
