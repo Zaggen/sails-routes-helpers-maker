@@ -4,10 +4,9 @@ newsRoutesHelpers = require('def-inc').Module ->
 
   fnSuffix = 'Path'
   routeSetParamsQ = {}
-  multilingualRoutes = {}
   siteDefaultLang = 'en'
 
-  @make = (routesObj, routeLocales)->
+  @make = (routesObj, routeLocales, multilingualHelperDefaultLang = siteDefaultLang)->
     helpers = {}
     for route of routesObj
       routeFragments = route.split('/')
@@ -17,15 +16,14 @@ newsRoutesHelpers = require('def-inc').Module ->
       routeParams = []
       controllerAction = null
 
-      #isMultilingual = if routeLocales? and routeLocales[routeName]? then yes else no
       if routeLocales?
         currentRouteLocale = routeLocales[routeName] if routeLocales[routeName]?
+        # if it is multilingual but is not the default routeName then skip to avoid creating
+        # helpers in different languages, we only want to create the default one, that can return all language versions.
         if currentRouteLocale[siteDefaultLang] isnt routeName then continue
         isMultilingual = yes
       else
         isMultilingual = no
-
-      # if it is multilingual but is not the default routeName then skip
 
       for fragment in routeFragments
         if fragment.charAt(0) is ':'
@@ -33,22 +31,12 @@ newsRoutesHelpers = require('def-inc').Module ->
         else
           controllerAction = fragment
 
-      if controllerAction?
-        helperName = controllerAction + _.capitalize(routeName) + fnSuffix
-      else
-        helperName = routeName + fnSuffix
+      helperName = getHelperName(routeName, controllerAction)
 
-      if routeParams.length > 0
-        if routeSetParamsQ[routeName]? and routeSetParamsQ[routeName] isnt routeParams.length
-          errMsg = """
-          The routes related to /#{routeName} have inconsistent parameters,
-          this module can't guess which one should use, please modify those
-          routes to have the same number of parameters """
-          throw new Error(errMsg)
-        routeSetParamsQ[routeName] = routeParams.length
+      checkForInconsistentRoutes(routeName, routeParams)
 
       if isMultilingual
-        fn = getMultilingualPathFn(routeName, routeParams, controllerAction, routeLocales, siteDefaultLang)
+        fn = getMultilingualPathFn(routeName, routeParams, controllerAction, routeLocales, multilingualHelperDefaultLang)
       else
         fn = getPathFn(baseRoute, routeParams, controllerAction)
 
@@ -56,6 +44,22 @@ newsRoutesHelpers = require('def-inc').Module ->
         helpers[helperName] = fn
 
     return helpers
+
+  getHelperName = (routeName, controllerAction)->
+    if controllerAction?
+      controllerAction + _.capitalize(routeName) + fnSuffix
+    else
+      routeName + fnSuffix
+
+  checkForInconsistentRoutes = (routeName, routeParams)->
+    if routeParams.length > 0
+      if routeSetParamsQ[routeName]? and routeSetParamsQ[routeName] isnt routeParams.length
+        errMsg = """
+          The routes related to /#{routeName} have inconsistent parameters,
+          this module can't guess which one should use, please modify those
+          routes to have the same number of parameters """
+        throw new Error(errMsg)
+      routeSetParamsQ[routeName] = routeParams.length
 
   getPathFn = (path, params, action)->
     return (instance)->
@@ -69,8 +73,8 @@ newsRoutesHelpers = require('def-inc').Module ->
         path += "/#{action}"
       return path
 
-  getMultilingualPathFn = (routeName, params, action, routeLocales, defaultLang)->
-    return (instance, lang = siteDefaultLang)->
+  getMultilingualPathFn = (routeName, params, action, routeLocales, multilingualHelperDefaultLang)->
+    return (instance, lang = multilingualHelperDefaultLang)->
       # When only the language is passed, we then set the lang parameter to the first argument,
       # and make sure the instance is null
       if _.isString(instance)
