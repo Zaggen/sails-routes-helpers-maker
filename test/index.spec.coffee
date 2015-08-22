@@ -90,7 +90,9 @@ describe 'route-based-helpers Module', ->
       expect(multilingualHelpers.editPhotosPath).to.be.a('function')
 
     describe 'The created helpers', ->
-      mockedInstance = {id: 1, slug: 'the-amazing-spiderman', translatedSlugs: {'en': 'the-amazing-spiderman', 'es': 'el-increible-spiderman'}}
+      toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
+
+      mockedInstance = {id: 1, slug: 'the-amazing-spiderman', translatedSlugs: {'en': 'the-amazing-spiderman', 'es': 'el-increible-spiderman'}, toParam}
       describe 'photosPath helper', ->
         it 'should return the index path when no instance is passed as argument and language is not passed', ->
           expect(multilingualHelpers.photosPath()).to.equal('/photos')
@@ -102,15 +104,20 @@ describe 'route-based-helpers Module', ->
           expect(-> multilingualHelpers.photosPath('es', mockedInstance)).to.throw(Error)
 
         it 'should return the show path when a model instance and language code are passed as argument', ->
-          expect(multilingualHelpers.photosPath(mockedInstance, 'en')).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.slug}")
-          expect(multilingualHelpers.photosPath(mockedInstance, 'es')).to.equal("/es/fotos/#{mockedInstance.id}/#{mockedInstance.slug}")
+          lang = 'en'
+          expect(multilingualHelpers.photosPath(mockedInstance, lang)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}")
+          lang = 'es'
+          expect(multilingualHelpers.photosPath(mockedInstance, lang)).to.equal("/es/fotos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}")
 
-        it 'should throw an error when an instance is passed, without the translatedSlugs key', ->
+        it 'should throw an error when an instance is passed, without the .toParam method', ->
           expect(-> multilingualHelpers.photosPath({id: 1, slug: 'the-amazing-spiderman'})).to.throw(Error)
 
       describe 'editPhotosPath helper', ->
         it 'should return the edit path when a model instance is passed as argument', ->
-          expect(multilingualHelpers.editPhotosPath(mockedInstance)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.slug}/edit")
+          lang = 'en'
+          expect(multilingualHelpers.editPhotosPath(mockedInstance)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}/edit")
+          lang = 'es'
+          expect(multilingualHelpers.editPhotosPath(mockedInstance, 'es')).to.equal("/es/fotos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}/edit")
 
       describe 'newPhotosPath helper', ->
         it 'should return the edit path when nothing is passed as argument', ->
