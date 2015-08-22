@@ -1,0 +1,31 @@
+{
+  "name": "sails-routes-helpers-maker",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.spec.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zaggen/sails-routes-helpers-maker"
+  },
+  "keywords": [
+    "dependency injection"
+  ],
+  "author": "Zaggen/Lu Roman <xpynesoul@gmail.com> (https://github.com/Zaggen)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zaggen/sails-routes-helpers-maker/issues"
+  },
+  "homepage": "",
+  "dependencies": {
+    "def-inc": "^0.5.0",
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "coffee-script": "^1.9.3",
+    "mocha": "^2.2.5"
+  }
+}
