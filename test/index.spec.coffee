@@ -133,3 +133,11 @@ describe 'route-based-helpers Module', ->
           expect(multilingualHelpers.newPhotosPath('es')).to.equal("/es/fotos/new")
 
 
+      describe 'When passing a language code to the make method', ->
+        multilingualHelpers2 = helpersMaker.make(multilingualRoutes, routeLocales, 'es')
+
+        mockedInstance = {id: 1, slug: 'the-amazing-spiderman', translatedSlugs: {'en': 'the-amazing-spiderman', 'es': 'el-increible-spiderman'}, toParam}
+        describe 'photosPath helper', ->
+          it 'should return the index path on the new default language when no instance is passed as argument and language is not passed', ->
+            expect(multilingualHelpers2.photosPath()).to.equal('/es/fotos')
+
