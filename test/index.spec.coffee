@@ -7,6 +7,8 @@ describe 'route-based-helpers Module', ->
 
   describe 'When using a single language routes obj', ->
     routes =
+      'GET /': 'HomeController.index'
+      '/magazines': 'MagazinesController.index'
       'GET /photos/:id/:slug': 'PhotosController.show'
       'PUT /photos/:id/:slug': 'NewsController.update'
       'DELETE /photos/:id/:slug': 'NewsController.destroy'
@@ -16,6 +18,12 @@ describe 'route-based-helpers Module', ->
       'POST /photos': 'PhotosController.create'
 
     helpers = helpersMaker.make(routes)
+
+    it 'should create a homePath method when a route / is provided', ->
+      expect(helpers.homePath).to.be.a('function')
+
+    it 'should create a helper for a given route even when no http verb is specified ', ->
+      expect(helpers.magazinesPath).to.be.a('function')
 
     it 'should create a photosPath method when a route /photos/ is provided', ->
       expect(helpers.photosPath).to.be.a('function')
@@ -81,6 +89,8 @@ describe 'route-based-helpers Module', ->
       photos: photosLocales
       fotos: photosLocales
 
+    toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
+
     multilingualHelpers = helpersMaker.make(multilingualRoutes, routeLocales)
 
     it 'should create a photosPath method when a route /photos/ is provided', ->
@@ -89,8 +99,6 @@ describe 'route-based-helpers Module', ->
       expect(multilingualHelpers.editPhotosPath).to.be.a('function')
 
     describe 'The created helpers', ->
-      toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
-
       mockedInstance = {id: 1, slug: 'the-amazing-spiderman', translatedSlugs: {'en': 'the-amazing-spiderman', 'es': 'el-increible-spiderman'}, toParam}
       describe 'photosPath helper', ->
         it 'should return the index path when no instance is passed as argument and language is not passed', ->
@@ -123,4 +131,5 @@ describe 'route-based-helpers Module', ->
           expect(multilingualHelpers.newPhotosPath()).to.equal("/photos/new")
           expect(multilingualHelpers.newPhotosPath('en')).to.equal("/photos/new")
           expect(multilingualHelpers.newPhotosPath('es')).to.equal("/es/fotos/new")
+
 
