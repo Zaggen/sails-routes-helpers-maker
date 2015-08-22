@@ -11,7 +11,7 @@ newsRoutesHelpers = require('def-inc').Module ->
     helpers = {}
     for route of routesObj
       routeFragments = route.split('/')
-      httpVerb = routeFragments.shift()
+      httpVerb = routeFragments.shift() # Not used yet
       routeName = routeFragments.shift()
       baseRoute = "/#{routeName}"
       routeParams = []
@@ -48,52 +48,50 @@ newsRoutesHelpers = require('def-inc').Module ->
         routeSetParamsQ[routeName] = routeParams.length
 
       if isMultilingual
-        fn = do ->
-          params = routeParams #local copy of the fn
-          action = controllerAction # local copy
-          currentRouteName = routeName
-          (instance, lang = siteDefaultLang)->
-            # When only the language is passed, we then set the lang parameter to the first argument,
-            # and make sure the instance is null
-            if _.isString(instance)
-              if arguments.length is 1
-                lang = arguments[0]
-                instance = null
-              else
-                errMsg = """
-                Expected first parameter (instance) to be an object, if you are passing language as the first
-                parameter, do not pass more arguments to it.
-                """
-                throw new Error(errMsg)
-
-            path = getLocalizedPath(currentRouteName, routeLocales, lang)
-            if instance?
-              if not instance.toParam? then throw new Error "Expected instance.toParam() to exist but couldn't find it"
-              path += "/#{instance.toParam(lang)}"
-
-            if action?
-              path += "/#{action}"
-            return path
+        fn = getMultilingualPathFn(routeName, routeParams, controllerAction, routeLocales, siteDefaultLang)
       else
-        fn = do ->
-          params = routeParams #local copy of the fn
-          action = controllerAction # local copy
-          path = baseRoute
-          (instance)->
-            if instance?
-              for expectedParam in params
-                if not instance[expectedParam]?
-                  throw new Error "Expected the #{expectedParam} property in the passed instance but couldn't find it"
-                path += "/#{instance[expectedParam]}"
-
-            if action?
-              path += "/#{action}"
-            return path
+        fn = getPathFn(baseRoute, routeParams, controllerAction)
 
       if not helpers[helperName]?
         helpers[helperName] = fn
 
     return helpers
+
+  getPathFn = (path, params, action)->
+    return (instance)->
+      if instance?
+        for expectedParam in params
+          if not instance[expectedParam]?
+            throw new Error "Expected the #{expectedParam} property in the passed instance but couldn't find it"
+          path += "/#{instance[expectedParam]}"
+
+      if action?
+        path += "/#{action}"
+      return path
+
+  getMultilingualPathFn = (routeName, params, action, routeLocales, defaultLang)->
+    return (instance, lang = siteDefaultLang)->
+      # When only the language is passed, we then set the lang parameter to the first argument,
+      # and make sure the instance is null
+      if _.isString(instance)
+        if arguments.length is 1
+          lang = arguments[0]
+          instance = null
+        else
+          errMsg = """
+                Expected first parameter (instance) to be an object, if you are passing language as the first
+                parameter, do not pass more arguments to it.
+                """
+          throw new Error(errMsg)
+
+      path = getLocalizedPath(routeName, routeLocales, lang)
+      if instance?
+        if not instance.toParam? then throw new Error "Expected instance.toParam() to exist but couldn't find it"
+        path += "/#{instance.toParam(lang)}"
+
+      if action?
+        path += "/#{action}"
+      return path
 
   getLocalizedPath = (routeName, routeLocales, lang)->
     path = "/#{routeLocales[routeName][lang]}"
