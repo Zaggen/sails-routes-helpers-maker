@@ -1,9 +1,9 @@
 expect = require('chai').expect
-routeBasedHelpers = require('../index')
+helpersMaker = require('../index')
 
 describe 'route-based-helpers Module', ->
-  it 'should have a makeHelpers method', ->
-    expect(routeBasedHelpers.makeHelpers).to.be.a('function')
+  it 'should have a make method', ->
+    expect(helpersMaker.make).to.be.a('function')
 
   describe 'When using a single language routes obj', ->
     routes =
@@ -15,7 +15,7 @@ describe 'route-based-helpers Module', ->
       'GET /photos/:id/:slug/edit': 'PhotosController.edit'
       'POST /photos': 'PhotosController.create'
 
-    helpers = routeBasedHelpers.makeHelpers(routes)
+    helpers = helpersMaker.make(routes)
 
     it 'should create a photosPath method when a route /photos/ is provided', ->
       expect(helpers.photosPath).to.be.a('function')
@@ -53,7 +53,7 @@ describe 'route-based-helpers Module', ->
           'POST /photos': 'PhotosController.create'
 
         throwingFn = ->
-          routeBasedHelpers.makeHelpers(inconsistentRoutes)
+          helpersMaker.make(inconsistentRoutes)
 
         it 'should throw an error', ->
           expect(throwingFn).to.throw(Error)
@@ -81,7 +81,7 @@ describe 'route-based-helpers Module', ->
       photos: photosLocales
       fotos: photosLocales
 
-    multilingualHelpers = routeBasedHelpers.makeHelpers(multilingualRoutes, routeLocales)
+    multilingualHelpers = helpersMaker.make(multilingualRoutes, routeLocales)
 
     it 'should create a photosPath method when a route /photos/ is provided', ->
       expect(multilingualHelpers.photosPath).to.be.a('function')

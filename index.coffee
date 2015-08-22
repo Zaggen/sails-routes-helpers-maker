@@ -7,7 +7,7 @@ newsRoutesHelpers = require('def-inc').Module ->
   multilingualRoutes = {}
   siteDefaultLang = 'en'
 
-  @makeHelpers = (routesObj, routeLocales)->
+  @make = (routesObj, routeLocales)->
     helpers = {}
     for route of routesObj
       routeFragments = route.split('/')
