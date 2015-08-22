@@ -68,10 +68,8 @@ newsRoutesHelpers = require('def-inc').Module ->
 
             path = getLocalizedPath(currentRouteName, routeLocales, lang)
             if instance?
-              for expectedParam in params
-                if not instance[expectedParam]?
-                  throw new Error "Expected the #{expectedParam} property in the passed instance but couldn't find it"
-                path += "/#{instance[expectedParam]}"
+              if not instance.toParam? then throw new Error "Expected instance.toParam() to exist but couldn't find it"
+              path += "/#{instance.toParam(lang)}"
 
             if action?
               path += "/#{action}"
