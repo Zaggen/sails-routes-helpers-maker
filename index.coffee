@@ -12,7 +12,7 @@ newsRoutesHelpers = require('def-inc').Module ->
     for route of routesObj
       routeFragments = route.split('/')
       httpVerb = routeFragments.shift() # Not used yet
-      routeName = routeFragments.shift()
+      routeName = if (routeName = routeFragments.shift()) is '' then routeName = 'home' else routeName
       baseRoute = "/#{routeName}"
       routeParams = []
       controllerAction = null
