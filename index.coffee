@@ -69,15 +69,8 @@ newsRoutesHelpers = require('def-inc').Module ->
       # When only the language is passed, we then set the lang parameter to the first argument,
       # and make sure the instance is null
       if _.isString(instance)
-        if arguments.length is 1
-          lang = arguments[0]
-          instance = null
-        else
-          errMsg = """
-                Expected first parameter (instance) to be an object, if you are passing language as the first
-                parameter, do not pass more arguments to it.
-                """
-          throw new Error(errMsg)
+        lang = arguments[0]
+        instance = null
 
       path = getLocalizedPath(routeName, routeLocales, lang)
       if instance?
