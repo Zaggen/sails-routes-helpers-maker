@@ -61,22 +61,6 @@ describe 'route-based-helpers Module', ->
           it 'should return the edit path when nothing is passed as argument', ->
             expect(helpers.newPhotosPath()).to.equal("/photos/new")
 
-        describe 'When a route set with inconsistent params are passed', ->
-          inconsistentRoutes =
-            'GET /photos/:id/:slug': 'PhotosController.show'
-            'PUT /photos/:id/': 'NewsController.update'
-            'DELETE /photos/:id': 'NewsController.destroy'
-            'GET /photos': 'PhotosController.index'
-            'GET /photos/new': 'PhotosController.new'
-            'GET /photos/:id/edit': 'PhotosController.edit'
-            'POST /photos': 'PhotosController.create'
-
-          throwingFn = ->
-            helpersMaker.make(inconsistentRoutes)
-
-          it 'should throw an error', ->
-            expect(throwingFn).to.throw(Error)
-
   describe 'When using a multiple language routes obj', ->
     multilingualRoutes =
       'GET /': 'HomeController.index'
