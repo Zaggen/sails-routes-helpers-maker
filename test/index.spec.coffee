@@ -5,7 +5,7 @@ describe 'route-based-helpers Module', ->
   it 'should have a make method', ->
     expect(helpersMaker.make).to.be.a('function')
 
-  describe.only 'When using a single language routes obj', ->
+  describe 'When using a single language routes obj', ->
     routes =
       'GET /': 'HomeController.index'
       '/magazines': 'MagazinesController.index'
@@ -171,10 +171,10 @@ describe 'route-based-helpers Module', ->
         multilingualHelpers3 = helpersMaker.make(multilingualRoutes, routeLocales)
         it 'should make a regular version of the path fn to the route that does not have a corresponding locale', ->
           expect(multilingualHelpers3.homePath()).to.equal('/')
-          expect(multilingualHelpers3.homePath('es')).to.equal('/')
+          expect(-> multilingualHelpers3.homePath('es')).to.throw(Error)
 
           expect(multilingualHelpers3.adminPath()).to.equal('/admin')
-          expect(multilingualHelpers3.adminPath('es')).to.equal('/admin')
+          expect(-> multilingualHelpers3.adminPath('es')).to.throw(Error)
 
           expect(multilingualHelpers3.photosPath()).to.equal('/photos')
           expect(multilingualHelpers3.photosPath('es')).to.equal('/es/fotos')
