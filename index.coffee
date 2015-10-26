@@ -33,8 +33,6 @@ newsRoutesHelpers = require('def-inc').Module ->
 
       helperName = getHelperName(routeName, controllerAction)
 
-      checkForInconsistentRoutes(routeName, routeParams)
-
       if isMultilingual
         fn = getMultilingualPathFn(routeName, routeParams, controllerAction, routeLocales, multilingualHelperDefaultLang)
       else
@@ -55,10 +53,8 @@ newsRoutesHelpers = require('def-inc').Module ->
     path = if routeName isnt 'home' then "/#{routeName}" else "/"
     return (instance)->
       if instance?
-        for expectedParam in params
-          if not instance[expectedParam]?
-            throw new Error "Expected the #{expectedParam} property in the passed instance but couldn't find it"
-          path += "/#{instance[expectedParam]}"
+        if not instance.toParam? then throw new Error "Expected instance.toParam() to exist but couldn't find it"
+        path += "/#{instance.toParam()}"
 
       if action?
         path += "/#{action}"
@@ -85,16 +81,5 @@ newsRoutesHelpers = require('def-inc').Module ->
     path = "/#{routeLocales[routeName][lang]}"
     path = if lang is siteDefaultLang then path else "/#{lang}#{path}"
     return path
-
-  checkForInconsistentRoutes = (routeName, routeParams)->
-    if routeParams.length > 0
-      if routeSetParamsQ[routeName]? and routeSetParamsQ[routeName] isnt routeParams.length
-        errMsg = """
-          The routes related to /#{routeName} have inconsistent parameters,
-          this module can't guess which one should use, please modify those
-          routes to have the same number of parameters """
-        throw new Error(errMsg)
-      routeSetParamsQ[routeName] = routeParams.length
-
 
 module.exports = newsRoutesHelpers
