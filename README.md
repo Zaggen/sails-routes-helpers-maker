@@ -1,8 +1,7 @@
 # sails-routes-helpers-maker
 It takes the object with all routes defined in it (sails.js routes) and create path helpers
 
-I'm making this module for a current project.Do not use in production, I'm just laying out the functionality that i
-want, i haven't refactored anything yet or taking performance into account.
+This module is in beta, use at your own risk.
 
 ## Usage Example
 ```coffeescript
@@ -24,10 +23,8 @@ multilingualRoutes =
       'GET /fotos/:id/:slug/edit': 'PhotosController.edit'
       'POST /fotos': 'PhotosController.create'
 
-    photosLocales = {en: 'photos', es: 'fotos'}
     routeLocales =
-      photos: photosLocales
-      fotos: photosLocales
+      photos: {en: 'photos', es: 'fotos'}
 
     toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
 
