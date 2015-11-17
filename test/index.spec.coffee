@@ -80,15 +80,13 @@ describe 'route-based-helpers Module', ->
       'GET /fotos/:id/:slug/edit': 'PhotosController.edit'
       'POST /fotos': 'PhotosController.create'
 
-    photosLocales = {en: 'photos', es: 'fotos'}
-    routeLocales =
+    routesLocales =
       home: {en: '', es: ''}
-      photos: photosLocales
-      fotos: photosLocales
+      photos: {en: 'photos', es: 'fotos'}
 
     toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
 
-    multilingualHelpers = helpersMaker.make(multilingualRoutes, routeLocales)
+    multilingualHelpers = helpersMaker.make(multilingualRoutes, routesLocales)
 
     it 'should create a homePath method, given that a root path "/" was provided', ->
       expect(multilingualHelpers.homePath).to.be.a('function')
@@ -150,25 +148,24 @@ describe 'route-based-helpers Module', ->
 
 
       describe 'When passing a language code to the make method', ->
-        multilingualHelpers2 = helpersMaker.make(multilingualRoutes, routeLocales, 'es')
+        multilingualHelpers2 = helpersMaker.make(multilingualRoutes, routesLocales, 'es')
 
         describe 'photosPath helper', ->
           it 'should return the index path on the new default language when no instance is passed as argument and language is not passed', ->
             expect(multilingualHelpers2.photosPath()).to.equal('/es/fotos')
 
 
-      describe 'When a routeLocales object is passed, but not all routesNames are specified in the locales', ->
+      describe 'When a routesLocales object is passed, but not all routesNames are specified in the locales', ->
         multilingualRoutes =
           'GET /': 'HomeController.index'
           'GET /admin': 'AdminController.index'
           'GET /photos/:id/:slug': 'PhotosController.show'
           'GET /fotos/:id/:slug': 'PhotosController.show'
 
-        routeLocales =
-          photos: {en: 'photos', es: 'fotos'}
+        routesLocales =
           fotos: {en: 'photos', es: 'fotos'}
 
-        multilingualHelpers3 = helpersMaker.make(multilingualRoutes, routeLocales)
+        multilingualHelpers3 = helpersMaker.make(multilingualRoutes, routesLocales)
         it 'should make a regular version of the path fn to the route that does not have a corresponding locale', ->
           expect(multilingualHelpers3.homePath()).to.equal('/')
           expect(-> multilingualHelpers3.homePath('es')).to.throw(Error)
