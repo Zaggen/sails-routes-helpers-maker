@@ -81,8 +81,8 @@ describe 'route-based-helpers Module', ->
       'POST /fotos': 'PhotosController.create'
 
     routesLocales =
-      home: {en: '', es: ''}
-      photos: {en: 'photos', es: 'fotos'}
+      '/': {en: '/', es: '/'}
+      '/photos': {en: '/photos', es: '/fotos'}
 
     toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
 
@@ -163,7 +163,7 @@ describe 'route-based-helpers Module', ->
           'GET /fotos/:id/:slug': 'PhotosController.show'
 
         routesLocales =
-          fotos: {en: 'photos', es: 'fotos'}
+          '/fotos': {en: '/photos', es: '/fotos'}
 
         multilingualHelpers3 = helpersMaker.make(multilingualRoutes, routesLocales)
         it 'should make a regular version of the path fn to the route that does not have a corresponding locale', ->
