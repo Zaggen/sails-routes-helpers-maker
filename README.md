@@ -24,7 +24,8 @@ multilingualRoutes =
   'POST /fotos': 'PhotosController.create'
 
 routeLocales =
-  photos: {en: 'photos', es: 'fotos'}
+  '/': {en: '/', es: '/'}
+  '/photos': {en: '/photos', es: '/fotos'}
 
 toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
 
