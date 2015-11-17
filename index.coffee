@@ -6,8 +6,9 @@ newsRoutesHelpers = require('def-inc').Module ->
   routeSetParamsQ = {}
   siteDefaultLang = 'en'
 
-  @make = (routesObj, routeLocales, multilingualHelperDefaultLang = siteDefaultLang)->
+  @make = (routesObj, routesLocales, multilingualHelperDefaultLang = siteDefaultLang)->
     helpers = {}
+    completeRouteLocalesDictionary(routesLocales)
     for route of routesObj
       routeFragments = route.split('/')
       httpVerb = routeFragments.shift() # Not used yet
@@ -16,9 +17,9 @@ newsRoutesHelpers = require('def-inc').Module ->
       controllerAction = null
       isMultilingual = no
 
-      if routeLocales?
-        if routeLocales[routeName]?
-          currentRouteLocale = routeLocales[routeName]
+      if routesLocales?
+        if routesLocales[routeName]?
+          currentRouteLocale = routesLocales[routeName]
           # if it is multilingual but is not the default routeName then skip to avoid creating
           # helpers in different languages, we only want to create the default one, that can return all language versions.
           if currentRouteLocale[siteDefaultLang] isnt routeName and routeName isnt 'home'
@@ -34,7 +35,7 @@ newsRoutesHelpers = require('def-inc').Module ->
       helperName = getHelperName(routeName, controllerAction)
 
       if isMultilingual
-        fn = getMultilingualPathFn(routeName, routeParams, controllerAction, routeLocales, multilingualHelperDefaultLang)
+        fn = getMultilingualPathFn(routeName, routeParams, controllerAction, routesLocales, multilingualHelperDefaultLang)
       else
         fn = getPathFn(routeName, routeParams, controllerAction)
 
@@ -42,6 +43,13 @@ newsRoutesHelpers = require('def-inc').Module ->
         helpers[helperName] = fn
 
     return helpers
+
+  completeRouteLocalesDictionary = (routesLocales)->
+    for routeKey, translations of routesLocales
+      for lang, route of translations
+        if not routesLocales[route]?
+          routesLocales[route] = translations
+    return routesLocales      
 
   getHelperName = (routeName, controllerAction)->
     if controllerAction?
@@ -60,7 +68,7 @@ newsRoutesHelpers = require('def-inc').Module ->
         path += "/#{action}"
       return path
 
-  getMultilingualPathFn = (routeName, params, action, routeLocales, multilingualHelperDefaultLang)->
+  getMultilingualPathFn = (routeName, params, action, routesLocales, multilingualHelperDefaultLang)->
     return (instance, lang = multilingualHelperDefaultLang)->
       # When only the language is passed, we then set the lang parameter to the first argument,
       # and make sure the instance is null
@@ -68,7 +76,7 @@ newsRoutesHelpers = require('def-inc').Module ->
         lang = arguments[0]
         instance = null
 
-      path = getLocalizedPath(routeName, routeLocales, lang)
+      path = getLocalizedPath(routeName, routesLocales, lang)
       if instance?
         if not instance.toParam? then throw new Error "Expected instance.toParam() to exist but couldn't find it"
         path += "/#{instance.toParam(lang)}"
@@ -77,8 +85,8 @@ newsRoutesHelpers = require('def-inc').Module ->
         path += "/#{action}"
       return path
 
-  getLocalizedPath = (routeName, routeLocales, lang)->
-    path = "/#{routeLocales[routeName][lang]}"
+  getLocalizedPath = (routeName, routesLocales, lang)->
+    path = "/#{routesLocales[routeName][lang]}"
     path = if lang is siteDefaultLang then path else "/#{lang}#{path}"
     return path
 
