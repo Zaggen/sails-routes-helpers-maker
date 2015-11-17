@@ -27,17 +27,29 @@ routeLocales =
   '/': {en: '/', es: '/'}
   '/photos': {en: '/photos', es: '/fotos'}
 
-toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
-
 helpers = helpersMaker.make(multilingualRoutes, routeLocales)
+```
 
 # Creates the following helpers
+```coffeescript
 helpers.homePath() # returns '/'
 helpers.homePath('es') # returns 'es/'
 
 helpers.photosPath() # returns /photos
 helpers.photosPath('es') # returns /es/fotos
-# photoRecordInstance is a single record (object returned by waterline query), and has .toParams() instance method
+```
+
+An instance to be passed to the multilingual helper should have a toParam method on it, that indicates
+how and what info should be extracted from it, for example, assume the following record was returned by
+running a waterline query like this: Photo.findOne(23).exec(....)
+
+```coffeescript
+photoRecordInstance =
+  id: 23
+  slug: {en: 'amazing-sunrise', es: 'amanecer-espectacular'}
+  toParam = (lang)-> "#{@id}/#{@slug[lang]}"
+
+
 helpers.photosPath(photoRecordInstance, 'en') # returns /photos/23/amazing-sunrise
 helpers.photosPath(photoRecordInstance, 'es') # returns /es/fotos/23/amanecer-espectacular
 
