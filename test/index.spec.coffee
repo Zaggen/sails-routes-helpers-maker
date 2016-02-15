@@ -16,6 +16,7 @@ describe 'route-based-helpers Module', ->
       'GET /photos/new': 'PhotosController.new'
       'GET /photos/:id/:slug/edit': 'PhotosController.edit'
       'POST /photos': 'PhotosController.create'
+      'GET /admin/login': 'AdminController.index'
 
     helpers = helpersMaker.make(routes)
 
@@ -53,6 +54,9 @@ describe 'route-based-helpers Module', ->
           it 'should throw an error when the passed instance does not contains a .toParam method', ->
             expect(-> helpers.photosPath({id:1})).to.throw(Error)
 
+          it 'should return the same path no matter how many times it was called', ->
+            expect(helpers.photosPath()).to.equal(helpers.photosPath())
+
         describe 'editPhotosPath helper', ->
           it 'should return the edit path when a model instance is passed as argument', ->
             expect(helpers.editPhotosPath(mockedInstance)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.slug}/edit")
@@ -60,6 +64,10 @@ describe 'route-based-helpers Module', ->
         describe 'newPhotosPath helper', ->
           it 'should return the edit path when nothing is passed as argument', ->
             expect(helpers.newPhotosPath()).to.equal("/photos/new")
+
+      describe 'loginAdminPath() helper', ->
+        it 'should return the same path no matter how many times it was called', ->
+          expect(helpers.loginAdminPath()).to.equal(helpers.loginAdminPath())
 
   describe 'When using a multiple language routes obj', ->
     multilingualRoutes =
