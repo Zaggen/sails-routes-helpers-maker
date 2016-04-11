@@ -1,6 +1,6 @@
 _ = require('lodash')
 
-newsRoutesHelpers = require('def-inc').Module ->
+newsRoutesHelpers = require('def-type').Module ->
 
   fnSuffix = 'Path'
   routeSetParamsQ = {}
