@@ -62,8 +62,9 @@ newsRoutesHelpers = require('def-inc').Module ->
       routeName + fnSuffix
 
   getPathFn = (routeName, params, action)->
-    path = if routeName isnt 'home' then "/#{routeName}" else "/"
+    basePath = if routeName isnt 'home' then "/#{routeName}" else "/"
     return (instance)->
+      path = basePath
       if instance?
         if not instance.toParam? then throw new Error "Expected instance.toParam() to exist but couldn't find it"
         path += "/#{instance.toParam()}"
