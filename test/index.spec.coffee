@@ -16,7 +16,7 @@ describe 'route-based-helpers Module', ->
       'GET /photos/new': 'PhotosController.new'
       'GET /photos/:id/:slug/edit': 'PhotosController.edit'
       'POST /photos': 'PhotosController.create'
-      'GET /admin/login': 'AdminController.index'
+      'GET /admin/login': 'AdminController.index' # This kind of route does not work (admin should be defined as a namespace)
 
     helpers = helpersMaker.make(routes)
 
@@ -64,6 +64,9 @@ describe 'route-based-helpers Module', ->
         describe 'newPhotosPath helper', ->
           it 'should return the edit path when nothing is passed as argument', ->
             expect(helpers.newPhotosPath()).to.equal("/photos/new")
+
+          it 'should return the same path no matter how many times it was called', ->
+            expect(helpers.newPhotosPath()).to.equal(helpers.newPhotosPath())
 
       describe 'loginAdminPath() helper', ->
         it 'should return the same path no matter how many times it was called', ->
