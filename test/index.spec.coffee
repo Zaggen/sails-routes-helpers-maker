@@ -26,10 +26,10 @@ describe 'route-based-helpers Module', ->
     it 'should create a helper for a given route even when no http verb is specified ', ->
       expect(helpers.magazinesPath).to.be.a('function')
 
-    it 'should create a photoAlbumPath method when a route /photos/ is provided', ->
+    it 'should create a photoAlbumPath method when a route /photo-album/ is provided', ->
       expect(helpers.photoAlbumPath).to.be.a('function')
-      expect(helpers.newphotoAlbumPath).to.be.a('function')
-      expect(helpers.editphotoAlbumPath).to.be.a('function')
+      expect(helpers.newPhotoAlbumPath).to.be.a('function')
+      expect(helpers.editPhotoAlbumPath).to.be.a('function')
 
     describe 'The created helpers', ->
       describe 'homePath helper', ->
@@ -49,10 +49,10 @@ describe 'route-based-helpers Module', ->
         describe 'photoAlbumPath helper', ->
 
           it 'should return the index path when no instance is passed as argument', ->
-            expect(helpers.photoAlbumPath()).to.equal('/photos')
+            expect(helpers.photoAlbumPath()).to.equal('/photo-album')
 
           it 'should return the show path when a model instance is passed as argument', ->
-            expect(helpers.photoAlbumPath(mockedInstance)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.slug}")
+            expect(helpers.photoAlbumPath(mockedInstance)).to.equal("/photo-album/#{mockedInstance.id}/#{mockedInstance.slug}")
 
           it 'should throw an error when the passed instance does not contains a .toParam method', ->
             expect(-> helpers.photoAlbumPath({id:1})).to.throw(Error)
@@ -60,16 +60,16 @@ describe 'route-based-helpers Module', ->
           it 'should return the same path no matter how many times it was called', ->
             expect(helpers.photoAlbumPath()).to.equal(helpers.photoAlbumPath())
 
-        describe 'editphotoAlbumPath helper', ->
+        describe 'editPhotoAlbumPath helper', ->
           it 'should return the edit path when a model instance is passed as argument', ->
-            expect(helpers.editphotoAlbumPath(mockedInstance)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.slug}/edit")
+            expect(helpers.editPhotoAlbumPath(mockedInstance)).to.equal("/photo-album/#{mockedInstance.id}/#{mockedInstance.slug}/edit")
 
-        describe 'newphotoAlbumPath helper', ->
+        describe 'newPhotoAlbumPath helper', ->
           it 'should return the edit path when nothing is passed as argument', ->
-            expect(helpers.newphotoAlbumPath()).to.equal("/photos/new")
+            expect(helpers.newPhotoAlbumPath()).to.equal("/photo-album/new")
 
           it 'should return the same path no matter how many times it was called', ->
-            expect(helpers.newphotoAlbumPath()).to.equal(helpers.newphotoAlbumPath())
+            expect(helpers.newPhotoAlbumPath()).to.equal(helpers.newPhotoAlbumPath())
 
       describe 'loginAdminPath() helper', ->
         it 'should return the same path no matter how many times it was called', ->
@@ -78,25 +78,25 @@ describe 'route-based-helpers Module', ->
   describe 'When using a multiple language routes obj', ->
     multilingualRoutes =
       'GET /': 'HomeController.index'
-      'GET /photos/:id/:slug': 'PhotosController.show'
-      'PUT /photos/:id/:slug': 'NewsController.update'
-      'DELETE /photos/:id/:slug': 'NewsController.destroy'
-      'GET /photos': 'PhotosController.index'
-      'GET /photos/new': 'PhotosController.new'
-      'GET /photos/:id/:slug/edit': 'PhotosController.edit'
-      'POST /photos': 'PhotosController.create'
+      'GET /photo-album/:id/:slug': 'PhotosController.show'
+      'PUT /photo-album/:id/:slug': 'NewsController.update'
+      'DELETE /photo-album/:id/:slug': 'NewsController.destroy'
+      'GET /photo-album': 'PhotosController.index'
+      'GET /photo-album/new': 'PhotosController.new'
+      'GET /photo-album/:id/:slug/edit': 'PhotosController.edit'
+      'POST /photo-album': 'PhotosController.create'
 
-      'GET /fotos/:id/:slug': 'PhotosController.show'
-      'PUT /fotos/:id/:slug': 'NewsController.update'
-      'DELETE /fotos/:id/:slug': 'NewsController.destroy'
-      'GET /fotos': 'PhotosController.index'
-      'GET /fotos/new': 'PhotosController.new'
-      'GET /fotos/:id/:slug/edit': 'PhotosController.edit'
-      'POST /fotos': 'PhotosController.create'
+      'GET /album-fotografico/:id/:slug': 'PhotosController.show'
+      'PUT /album-fotografico/:id/:slug': 'NewsController.update'
+      'DELETE /album-fotografico/:id/:slug': 'NewsController.destroy'
+      'GET /album-fotografico': 'PhotosController.index'
+      'GET /album-fotografico/new': 'PhotosController.new'
+      'GET /album-fotografico/:id/:slug/edit': 'PhotosController.edit'
+      'POST /album-fotografico': 'PhotosController.create'
 
     routesLocales =
       '/': {en: '/', es: '/'}
-      '/photos': {en: '/photos', es: '/fotos'}
+      '/photo-album': {en: '/photo-album', es: '/album-fotografico'}
 
     toParam = (lang)-> "#{@id}/#{@translatedSlugs[lang]}"
 
@@ -105,10 +105,10 @@ describe 'route-based-helpers Module', ->
     it 'should create a homePath method, given that a root path "/" was provided', ->
       expect(multilingualHelpers.homePath).to.be.a('function')
 
-    it 'should create a photoAlbumPath method when a route /photos/ is provided', ->
+    it 'should create a photoAlbumPath method when a route /photo-album/ is provided', ->
       expect(multilingualHelpers.photoAlbumPath).to.be.a('function')
-      expect(multilingualHelpers.newphotoAlbumPath).to.be.a('function')
-      expect(multilingualHelpers.editphotoAlbumPath).to.be.a('function')
+      expect(multilingualHelpers.newPhotoAlbumPath).to.be.a('function')
+      expect(multilingualHelpers.editPhotoAlbumPath).to.be.a('function')
 
     describe 'The created helpers', ->
 
@@ -127,37 +127,37 @@ describe 'route-based-helpers Module', ->
         describe 'photoAlbumPath helper', ->
 
           it 'should return the index path when no instance is passed as argument and language is not passed', ->
-            expect(multilingualHelpers.photoAlbumPath()).to.equal('/photos')
+            expect(multilingualHelpers.photoAlbumPath()).to.equal('/photo-album')
 
           it 'should return the index path when no instance is passed as argument and language is passed', ->
-            expect(multilingualHelpers.photoAlbumPath('es')).to.equal('/es/fotos')
+            expect(multilingualHelpers.photoAlbumPath('es')).to.equal('/es/album-fotografico')
 
           xit 'should throw an error when a language is passed as first arg (a string) and a second argument(any)', ->
             expect(-> multilingualHelpers.photoAlbumPath('es', mockedInstance)).to.throw(Error)
 
           it 'should return the show path when a model instance and language code are passed as argument', ->
             lang = 'en'
-            expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}")
+            expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/photo-album/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}")
             lang = 'es'
-            expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/es/fotos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}")
+            expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/es/album-fotografico/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}")
 
           it 'should throw an error when an instance is passed, without the .toParam method', ->
             expect(-> multilingualHelpers.photoAlbumPath({id: 1, slug: 'the-amazing-spiderman'})).to.throw(Error)
 
 
-        describe 'editphotoAlbumPath helper', ->
+        describe 'editPhotoAlbumPath helper', ->
           it 'should return the edit path when a model instance is passed as argument', ->
             lang = 'en'
-            expect(multilingualHelpers.editphotoAlbumPath(mockedInstance)).to.equal("/photos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}/edit")
+            expect(multilingualHelpers.editPhotoAlbumPath(mockedInstance)).to.equal("/photo-album/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}/edit")
             lang = 'es'
-            expect(multilingualHelpers.editphotoAlbumPath(mockedInstance, 'es')).to.equal("/es/fotos/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}/edit")
+            expect(multilingualHelpers.editPhotoAlbumPath(mockedInstance, 'es')).to.equal("/es/album-fotografico/#{mockedInstance.id}/#{mockedInstance.translatedSlugs[lang]}/edit")
 
 
-        describe 'newphotoAlbumPath helper', ->
+        describe 'newPhotoAlbumPath helper', ->
           it 'should return the edit path when nothing is passed as argument', ->
-            expect(multilingualHelpers.newphotoAlbumPath()).to.equal("/photos/new")
-            expect(multilingualHelpers.newphotoAlbumPath('en')).to.equal("/photos/new")
-            expect(multilingualHelpers.newphotoAlbumPath('es')).to.equal("/es/fotos/new")
+            expect(multilingualHelpers.newPhotoAlbumPath()).to.equal("/photo-album/new")
+            expect(multilingualHelpers.newPhotoAlbumPath('en')).to.equal("/photo-album/new")
+            expect(multilingualHelpers.newPhotoAlbumPath('es')).to.equal("/es/album-fotografico/new")
 
 
 
@@ -166,18 +166,18 @@ describe 'route-based-helpers Module', ->
 
         describe 'photoAlbumPath helper', ->
           it 'should return the index path on the new default language when no instance is passed as argument and language is not passed', ->
-            expect(multilingualHelpers2.photoAlbumPath()).to.equal('/es/fotos')
+            expect(multilingualHelpers2.photoAlbumPath()).to.equal('/es/album-fotografico')
 
 
       describe 'When a routesLocales object is passed, but not all routesNames are specified in the locales', ->
         multilingualRoutes =
           'GET /': 'HomeController.index'
           'GET /admin': 'AdminController.index'
-          'GET /photos/:id/:slug': 'PhotosController.show'
-          'GET /fotos/:id/:slug': 'PhotosController.show'
+          'GET /photo-album/:id/:slug': 'PhotosController.show'
+          'GET /album-fotografico/:id/:slug': 'PhotosController.show'
 
         routesLocales =
-          '/fotos': {en: '/photos', es: '/fotos'}
+          '/album-fotografico': {en: '/photo-album', es: '/album-fotografico'}
 
         multilingualHelpers3 = helpersMaker.make(multilingualRoutes, routesLocales)
         it 'should make a regular version of the path fn to the route that does not have a corresponding locale', ->
@@ -187,6 +187,6 @@ describe 'route-based-helpers Module', ->
           expect(multilingualHelpers3.adminPath()).to.equal('/admin')
           expect(-> multilingualHelpers3.adminPath('es')).to.throw(Error)
 
-          expect(multilingualHelpers3.photoAlbumPath()).to.equal('/photos')
-          expect(multilingualHelpers3.photoAlbumPath('es')).to.equal('/es/fotos')
+          expect(multilingualHelpers3.photoAlbumPath()).to.equal('/photo-album')
+          expect(multilingualHelpers3.photoAlbumPath('es')).to.equal('/es/album-fotografico')
 

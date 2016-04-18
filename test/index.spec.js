@@ -31,10 +31,10 @@
       it('should create a helper for a given route even when no http verb is specified ', function() {
         return expect(helpers.magazinesPath).to.be.a('function');
       });
-      it('should create a photoAlbumPath method when a route /photos/ is provided', function() {
+      it('should create a photoAlbumPath method when a route /photo-album/ is provided', function() {
         expect(helpers.photoAlbumPath).to.be.a('function');
-        expect(helpers.newphotoAlbumPath).to.be.a('function');
-        return expect(helpers.editphotoAlbumPath).to.be.a('function');
+        expect(helpers.newPhotoAlbumPath).to.be.a('function');
+        return expect(helpers.editPhotoAlbumPath).to.be.a('function');
       });
       return describe('The created helpers', function() {
         describe('homePath helper', function() {
@@ -56,10 +56,10 @@
           });
           describe('photoAlbumPath helper', function() {
             it('should return the index path when no instance is passed as argument', function() {
-              return expect(helpers.photoAlbumPath()).to.equal('/photos');
+              return expect(helpers.photoAlbumPath()).to.equal('/photo-album');
             });
             it('should return the show path when a model instance is passed as argument', function() {
-              return expect(helpers.photoAlbumPath(mockedInstance)).to.equal("/photos/" + mockedInstance.id + "/" + mockedInstance.slug);
+              return expect(helpers.photoAlbumPath(mockedInstance)).to.equal("/photo-album/" + mockedInstance.id + "/" + mockedInstance.slug);
             });
             it('should throw an error when the passed instance does not contains a .toParam method', function() {
               return expect(function() {
@@ -72,17 +72,17 @@
               return expect(helpers.photoAlbumPath()).to.equal(helpers.photoAlbumPath());
             });
           });
-          describe('editphotoAlbumPath helper', function() {
+          describe('editPhotoAlbumPath helper', function() {
             return it('should return the edit path when a model instance is passed as argument', function() {
-              return expect(helpers.editphotoAlbumPath(mockedInstance)).to.equal("/photos/" + mockedInstance.id + "/" + mockedInstance.slug + "/edit");
+              return expect(helpers.editPhotoAlbumPath(mockedInstance)).to.equal("/photo-album/" + mockedInstance.id + "/" + mockedInstance.slug + "/edit");
             });
           });
-          return describe('newphotoAlbumPath helper', function() {
+          return describe('newPhotoAlbumPath helper', function() {
             it('should return the edit path when nothing is passed as argument', function() {
-              return expect(helpers.newphotoAlbumPath()).to.equal("/photos/new");
+              return expect(helpers.newPhotoAlbumPath()).to.equal("/photo-album/new");
             });
             return it('should return the same path no matter how many times it was called', function() {
-              return expect(helpers.newphotoAlbumPath()).to.equal(helpers.newphotoAlbumPath());
+              return expect(helpers.newPhotoAlbumPath()).to.equal(helpers.newPhotoAlbumPath());
             });
           });
         });
@@ -97,29 +97,29 @@
       var multilingualHelpers, multilingualRoutes, routesLocales, toParam;
       multilingualRoutes = {
         'GET /': 'HomeController.index',
-        'GET /photos/:id/:slug': 'PhotosController.show',
-        'PUT /photos/:id/:slug': 'NewsController.update',
-        'DELETE /photos/:id/:slug': 'NewsController.destroy',
-        'GET /photos': 'PhotosController.index',
-        'GET /photos/new': 'PhotosController.new',
-        'GET /photos/:id/:slug/edit': 'PhotosController.edit',
-        'POST /photos': 'PhotosController.create',
-        'GET /fotos/:id/:slug': 'PhotosController.show',
-        'PUT /fotos/:id/:slug': 'NewsController.update',
-        'DELETE /fotos/:id/:slug': 'NewsController.destroy',
-        'GET /fotos': 'PhotosController.index',
-        'GET /fotos/new': 'PhotosController.new',
-        'GET /fotos/:id/:slug/edit': 'PhotosController.edit',
-        'POST /fotos': 'PhotosController.create'
+        'GET /photo-album/:id/:slug': 'PhotosController.show',
+        'PUT /photo-album/:id/:slug': 'NewsController.update',
+        'DELETE /photo-album/:id/:slug': 'NewsController.destroy',
+        'GET /photo-album': 'PhotosController.index',
+        'GET /photo-album/new': 'PhotosController.new',
+        'GET /photo-album/:id/:slug/edit': 'PhotosController.edit',
+        'POST /photo-album': 'PhotosController.create',
+        'GET /album-fotografico/:id/:slug': 'PhotosController.show',
+        'PUT /album-fotografico/:id/:slug': 'NewsController.update',
+        'DELETE /album-fotografico/:id/:slug': 'NewsController.destroy',
+        'GET /album-fotografico': 'PhotosController.index',
+        'GET /album-fotografico/new': 'PhotosController.new',
+        'GET /album-fotografico/:id/:slug/edit': 'PhotosController.edit',
+        'POST /album-fotografico': 'PhotosController.create'
       };
       routesLocales = {
         '/': {
           en: '/',
           es: '/'
         },
-        '/photos': {
-          en: '/photos',
-          es: '/fotos'
+        '/photo-album': {
+          en: '/photo-album',
+          es: '/album-fotografico'
         }
       };
       toParam = function(lang) {
@@ -129,10 +129,10 @@
       it('should create a homePath method, given that a root path "/" was provided', function() {
         return expect(multilingualHelpers.homePath).to.be.a('function');
       });
-      it('should create a photoAlbumPath method when a route /photos/ is provided', function() {
+      it('should create a photoAlbumPath method when a route /photo-album/ is provided', function() {
         expect(multilingualHelpers.photoAlbumPath).to.be.a('function');
-        expect(multilingualHelpers.newphotoAlbumPath).to.be.a('function');
-        return expect(multilingualHelpers.editphotoAlbumPath).to.be.a('function');
+        expect(multilingualHelpers.newPhotoAlbumPath).to.be.a('function');
+        return expect(multilingualHelpers.editPhotoAlbumPath).to.be.a('function');
       });
       return describe('The created helpers', function() {
         describe('homePath helper', function() {
@@ -154,10 +154,10 @@
           };
           describe('photoAlbumPath helper', function() {
             it('should return the index path when no instance is passed as argument and language is not passed', function() {
-              return expect(multilingualHelpers.photoAlbumPath()).to.equal('/photos');
+              return expect(multilingualHelpers.photoAlbumPath()).to.equal('/photo-album');
             });
             it('should return the index path when no instance is passed as argument and language is passed', function() {
-              return expect(multilingualHelpers.photoAlbumPath('es')).to.equal('/es/fotos');
+              return expect(multilingualHelpers.photoAlbumPath('es')).to.equal('/es/album-fotografico');
             });
             xit('should throw an error when a language is passed as first arg (a string) and a second argument(any)', function() {
               return expect(function() {
@@ -167,9 +167,9 @@
             it('should return the show path when a model instance and language code are passed as argument', function() {
               var lang;
               lang = 'en';
-              expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/photos/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang]);
+              expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/photo-album/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang]);
               lang = 'es';
-              return expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/es/fotos/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang]);
+              return expect(multilingualHelpers.photoAlbumPath(mockedInstance, lang)).to.equal("/es/album-fotografico/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang]);
             });
             return it('should throw an error when an instance is passed, without the .toParam method', function() {
               return expect(function() {
@@ -180,20 +180,20 @@
               }).to["throw"](Error);
             });
           });
-          describe('editphotoAlbumPath helper', function() {
+          describe('editPhotoAlbumPath helper', function() {
             return it('should return the edit path when a model instance is passed as argument', function() {
               var lang;
               lang = 'en';
-              expect(multilingualHelpers.editphotoAlbumPath(mockedInstance)).to.equal("/photos/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang] + "/edit");
+              expect(multilingualHelpers.editPhotoAlbumPath(mockedInstance)).to.equal("/photo-album/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang] + "/edit");
               lang = 'es';
-              return expect(multilingualHelpers.editphotoAlbumPath(mockedInstance, 'es')).to.equal("/es/fotos/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang] + "/edit");
+              return expect(multilingualHelpers.editPhotoAlbumPath(mockedInstance, 'es')).to.equal("/es/album-fotografico/" + mockedInstance.id + "/" + mockedInstance.translatedSlugs[lang] + "/edit");
             });
           });
-          return describe('newphotoAlbumPath helper', function() {
+          return describe('newPhotoAlbumPath helper', function() {
             return it('should return the edit path when nothing is passed as argument', function() {
-              expect(multilingualHelpers.newphotoAlbumPath()).to.equal("/photos/new");
-              expect(multilingualHelpers.newphotoAlbumPath('en')).to.equal("/photos/new");
-              return expect(multilingualHelpers.newphotoAlbumPath('es')).to.equal("/es/fotos/new");
+              expect(multilingualHelpers.newPhotoAlbumPath()).to.equal("/photo-album/new");
+              expect(multilingualHelpers.newPhotoAlbumPath('en')).to.equal("/photo-album/new");
+              return expect(multilingualHelpers.newPhotoAlbumPath('es')).to.equal("/es/album-fotografico/new");
             });
           });
         });
@@ -202,7 +202,7 @@
           multilingualHelpers2 = helpersMaker.make(multilingualRoutes, routesLocales, 'es');
           return describe('photoAlbumPath helper', function() {
             return it('should return the index path on the new default language when no instance is passed as argument and language is not passed', function() {
-              return expect(multilingualHelpers2.photoAlbumPath()).to.equal('/es/fotos');
+              return expect(multilingualHelpers2.photoAlbumPath()).to.equal('/es/album-fotografico');
             });
           });
         });
@@ -211,13 +211,13 @@
           multilingualRoutes = {
             'GET /': 'HomeController.index',
             'GET /admin': 'AdminController.index',
-            'GET /photos/:id/:slug': 'PhotosController.show',
-            'GET /fotos/:id/:slug': 'PhotosController.show'
+            'GET /photo-album/:id/:slug': 'PhotosController.show',
+            'GET /album-fotografico/:id/:slug': 'PhotosController.show'
           };
           routesLocales = {
-            '/fotos': {
-              en: '/photos',
-              es: '/fotos'
+            '/album-fotografico': {
+              en: '/photo-album',
+              es: '/album-fotografico'
             }
           };
           multilingualHelpers3 = helpersMaker.make(multilingualRoutes, routesLocales);
@@ -230,8 +230,8 @@
             expect(function() {
               return multilingualHelpers3.adminPath('es');
             }).to["throw"](Error);
-            expect(multilingualHelpers3.photoAlbumPath()).to.equal('/photos');
-            return expect(multilingualHelpers3.photoAlbumPath('es')).to.equal('/es/fotos');
+            expect(multilingualHelpers3.photoAlbumPath()).to.equal('/photo-album');
+            return expect(multilingualHelpers3.photoAlbumPath('es')).to.equal('/es/album-fotografico');
           });
         });
       });
