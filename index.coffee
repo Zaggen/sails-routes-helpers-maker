@@ -55,7 +55,7 @@ newsRoutesHelpers = require('def-type').Module ->
     return routesLocales      
 
   getHelperName = (routeName, controllerAction)->
-    routeName = if routeName is '' then 'home' else routeName
+    routeName = _.camelCase(if routeName is '' then 'home' else routeName)
     if controllerAction?
       controllerAction + _.capitalize(routeName) + fnSuffix
     else
